@@ -15,33 +15,45 @@ async function main() {
   // await hre.run('compile');
 
   // We get the contract to deploy
-  const Wilderness = await ethers.getContractFactory("Wilderness");
-  const wilderness = await Wilderness.deploy();
+  if (
+    process.env.STONE_TOKEN_ADDRESS &&
+    process.env.STICK_TOKEN_ADDRESS &&
+    process.env.PLANT_TOKEN_ADDRESS &&
+    process.env.APPLE_TOKEN_ADDRESS
+  ) {
+    const Wilderness = await ethers.getContractFactory("Wilderness");
+    const wilderness = await Wilderness.deploy(
+      process.env.STONE_TOKEN_ADDRESS,
+      process.env.STICK_TOKEN_ADDRESS,
+      process.env.PLANT_TOKEN_ADDRESS,
+      process.env.APPLE_TOKEN_ADDRESS
+    );
 
-  await wilderness.deployed();
+    await wilderness.deployed();
 
-  console.log("Wilderness deployed to:", wilderness.address);
+    console.log("Wilderness deployed to:", wilderness.address);
 
-  // Add Wilderness to MINTABLE role for each ResourceToken...
-  const tokensToMint = [
-    "STONE_TOKEN_ADDRESS",
-    "STICK_TOKEN_ADDRESS",
-    "PLANT_TOKEN_ADDRESS",
-    "APPLE_TOKEN_ADDRESS",
-  ];
+    // Add Wilderness to MINTABLE role for each ResourceToken...
+    const tokensToMint = [
+      "STONE_TOKEN_ADDRESS",
+      "STICK_TOKEN_ADDRESS",
+      "PLANT_TOKEN_ADDRESS",
+      "APPLE_TOKEN_ADDRESS",
+    ];
 
-  for (let i = 0; i < tokensToMint.length; i++) {
-    const tokenAddress = process.env[tokensToMint[i]];
-    if (tokenAddress) {
-      const token = await ethers.getContractAt(
-        ResourceTokenContract.abi,
-        tokenAddress
-      );
-      const MINTER_ROLE = ethers.utils.keccak256(
-        ethers.utils.toUtf8Bytes("MINTER_ROLE")
-      );
-      await token.grantRole(MINTER_ROLE, wilderness.address);
-      console.log("Minter granted:", tokensToMint[i]);
+    for (let i = 0; i < tokensToMint.length; i++) {
+      const tokenAddress = process.env[tokensToMint[i]];
+      if (tokenAddress) {
+        const token = await ethers.getContractAt(
+          ResourceTokenContract.abi,
+          tokenAddress
+        );
+        const MINTER_ROLE = ethers.utils.keccak256(
+          ethers.utils.toUtf8Bytes("MINTER_ROLE")
+        );
+        await token.grantRole(MINTER_ROLE, wilderness.address);
+        console.log("Minter granted:", tokensToMint[i]);
+      }
     }
   }
 }
