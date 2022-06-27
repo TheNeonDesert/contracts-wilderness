@@ -16,6 +16,7 @@ async function main() {
 
   // We get the contract to deploy
   if (
+    process.env.AVATAR_ADDRESS &&
     process.env.STONE_TOKEN_ADDRESS &&
     process.env.STICK_TOKEN_ADDRESS &&
     process.env.PLANT_TOKEN_ADDRESS &&
@@ -23,6 +24,7 @@ async function main() {
   ) {
     const Wilderness = await ethers.getContractFactory("Wilderness");
     const wilderness = await Wilderness.deploy(
+      process.env.AVATAR_ADDRESS,
       process.env.STONE_TOKEN_ADDRESS,
       process.env.STICK_TOKEN_ADDRESS,
       process.env.PLANT_TOKEN_ADDRESS,
