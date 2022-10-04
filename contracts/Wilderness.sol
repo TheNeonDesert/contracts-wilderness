@@ -6,6 +6,26 @@ import "./MockResourceToken.sol";
 import "./MockERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 
+// TODO move all this to a whole new project Locations
+// abstract contract Location
+// abstract ResourceGatheringLocation is Location
+// startExpedition()
+// completeExpedition()
+
+// Wilderness is ResourceGatheringLocation
+// two necessary overrides are what's implemented below
+// add a check combat dealie to completeExpedition
+
+// Main loop...
+
+// 1 actions per minute, how many minutes
+// scale based on time, longer is less efficient
+
+// startExpedition takes in all the NFTs you want to send over
+
+// scale based on anti-botting global scaling
+//
+
 contract Wilderness is IERC721Receiver {
     // Contracts
     MockResourceToken private stone;
@@ -19,7 +39,7 @@ contract Wilderness is IERC721Receiver {
     mapping(address => uint256[]) public avatarOwners;
 
     // Tracking activeForagers[tokenId] ==> foraging details
-    mapping(uint256 => ForagingRecord) public activeForagers;
+    mapping(uint256 => ForagingRecord) public activeForagers; // rename to activeForageDetails, add getter?
     struct ForagingRecord {
         uint256 duration; // seconds
         uint256 startTime;
